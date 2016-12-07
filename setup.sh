@@ -166,14 +166,11 @@ declare -a FILES_TO_SYMLINK=(
   'shell/shell_config'
   'shell/shell_exports'
   'shell/shell_functions'
-  'shell/bash_profile'
-  'shell/bash_prompt'
-  'shell/bashrc'
   'shell/zshrc'
-
   'git/gitattributes'
   'git/gitconfig'
   'git/gitignore'
+  'emacs/emacs'
 
 )
 
@@ -224,15 +221,6 @@ main() {
   ln -fs $HOME/dotfiles/bin $HOME
 
   declare -a BINARIES=(
-    'batcharge.py'
-    'crlf'
-    'dups'
-    'git-delete-merged-branches'
-    'nyan'
-    'passive'
-    'proofread'
-    'ssh-key'
-    'weasel'
   )
 
   for i in ${BINARIES[@]}; do
@@ -241,18 +229,6 @@ main() {
   done
 
   unset BINARIES
-
-  # Symlink online-check.sh
-  ln -fs $HOME/dotfiles/lib/online-check.sh $HOME/online-check.sh
-
-  # Write out current crontab
-  crontab -l > mycron
-  # Echo new cron into cron file
-  echo "* * * * * ~/online-check.sh" >> mycron
-  # Install new cron file
-  crontab mycron
-  rm mycron
-
 }
 
 install_zsh () {
