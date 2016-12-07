@@ -79,7 +79,7 @@ auto-ls () {
   # explicit sexy ls'ing as aliases arent honored in here.
   hash gls >/dev/null 2>&1 && CLICOLOR_FORCE=1 gls -aFh --color --group-directories-first || ls
 }
-chpwd_functions=( auto-ls $chpwd_functions )
+chpwd_functions+=( auto-ls $chpwd_functions )
 
 # Source local extra (private) settings specific to machine if it exists
 [ -f ~/.zsh.local ] && source ~/.zsh.local
