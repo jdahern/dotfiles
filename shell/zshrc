@@ -64,7 +64,8 @@ COMPLETION_WAITING_DOTS="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=()
 
-# User configuration
+
+source $ZSH/oh-my-zsh.sh
 
 # Load the shell dotfiles
 for file in $HOME/.{shell_exports,shell_aliases,shell_functions,shell_config}; do
@@ -79,8 +80,6 @@ auto-ls () {
   hash gls >/dev/null 2>&1 && CLICOLOR_FORCE=1 gls -aFh --color --group-directories-first || ls
 }
 chpwd_functions=( auto-ls $chpwd_functions )
-
-source $ZSH/oh-my-zsh.sh
 
 # Source local extra (private) settings specific to machine if it exists
 [ -f ~/.zsh.local ] && source ~/.zsh.local
