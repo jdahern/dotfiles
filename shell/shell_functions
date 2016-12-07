@@ -23,12 +23,6 @@ function la() {
     }'
 }
 
-# cd into whatever is the forefront Finder window.
-cdf () {  # short for cdfinder
-  cd "`osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)'`"
-}
-
-
 # Start an HTTP server from a directory, optionally specifying the port
 function server() {
   local port="${1:-8000}"
@@ -38,24 +32,10 @@ function server() {
   python -c $'import SimpleHTTPServer;\nmap = SimpleHTTPServer.SimpleHTTPRequestHandler.extensions_map;\nmap[""] = "text/plain";\nfor key, value in map.items():\n\tmap[key] = value + ";charset=UTF-8";\nSimpleHTTPServer.test();' "$port"
 }
 
-
-# Copy w/ progress
-cp_p () {
-  rsync -WavP --human-readable --progress $1 $2
-}
-
 # qfind - used to quickly find files that contain a string in a directory
 qfind () {
   find . -exec grep -l -s $1 {} \;
   return 0
-}
-
-# get gzipped size
-function gz() {
-  echo "orig size    (bytes): "
-  cat "$1" | wc -c
-  echo "gzipped size (bytes): "
-  gzip -c "$1" | wc -c
 }
 
 # whois a domain or a URL
@@ -127,34 +107,10 @@ camerausedby () {
   echo -e "Recent camera uses:\n$usedby"
 }
 
-
-# animated gifs from any video
-# from Alex Sexton gist.github.com/SlexAxton/4989674
-gifify () {
-  if [[ -n "$1" ]]; then
-  if [[ $2 == '--good' ]]; then
-    ffmpeg -i "$1" -r 10 -vcodec png out-static-%05d.png
-    time convert -verbose +dither -layers Optimize -resize 900x900\> out-static*.png  GIF:- | gifsicle --colors 128 --delay=5 --loop --optimize=3 --multifile - > "$1.gif"
-    rm out-static*.png
-  else
-    ffmpeg -i "$1" -s 600x400 -pix_fmt rgb24 -r 10 -f gif - | gifsicle --optimize=3 --delay=3 > "$1.gif"
-  fi
-  else
-  echo "proper usage: gifify <input_movie.mov>. You DO need to include extension."
-  fi
-}
-
-# turn that video into webm.
-# brew reinstall ffmpeg --with-libvpx
-webmify () {
-  ffmpeg -i "$1" -vcodec libvpx -acodec libvorbis -isync -copyts -aq 80 -threads 3 -qmax 30 -y "$2" "$1.webm"
-}
-
-# visual studio code. a la `subl`
-code () { VSCODE_CWD="$PWD" open -n -b "com.microsoft.VSCodeInsiders" --args $*; }
-
-# `shellswitch [bash |zsh]`
-#   Must be in /etc/shells
-shellswitch () {
-  chsh -s $(brew --prefix)/bin/$1
+function myip() {
+    ifconfig lo0 | grep 'inet ' | sed -e 's/:/ /' | awk '{print "lo0       : " $2}'
+     ifconfig en0 | grep 'inet ' | sed -e 's/:/ /' | awk '{print "en0 (IPv4): " $2 " " $3 " " $4 " " $5 " " $6}'
+     ifconfig en0 | grep 'inet6 ' | sed -e 's/ / /' | awk '{print "en0 (IPv6): " $2 " " $3 " " $4 " " $5 " " $6}'
+     ifconfig en1 | grep 'inet ' | sed -e 's/:/ /' | awk '{print "en1 (IPv4): " $2 " " $3 " " $4 " " $5 " " $6}'
+     ifconfig en1 | grep 'inet6 ' | sed -e 's/ / /' | awk '{print "en1 (IPv6): " $2 " " $3 " " $4 " " $5 " " $6}'
 }
