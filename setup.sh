@@ -217,9 +217,6 @@ main() {
 
   unset FILES_TO_SYMLINK
 
-  # Copy binaries
-  ln -fs $HOME/dotfiles/bin $HOME
-
   declare -a BINARIES=(
   )
 
